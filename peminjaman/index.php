@@ -23,10 +23,6 @@ $query = mysqli_query($koneksi, "
 <head>
     <title>Data Peminjaman</title>
     <link rel="stylesheet" href="../style.css">
-    <title>Data Buku</title>
-
-<link rel="stylesheet" href="../style.css">
-
 </head>
 
 <body>
@@ -47,17 +43,19 @@ $query = mysqli_query($koneksi, "
 
     </aside>
 
-
     <main class="content">
 
         <h1>Data Peminjaman</h1>
 
         <a href="tambah.php" class="btn btn-tambah">
-            + Tambah Peminjaman
-        </a>
+    + Tambah Anggota
+</a>
 
-        <br><br>
+<button type="button" onclick="urutkanNama()" id="tombolUrut">
+    Urutkan Peminjaman A-Z
+</button>
 
+<br><br>
 
         <table>
 
@@ -72,37 +70,22 @@ $query = mysqli_query($koneksi, "
                 <th>Aksi</th>
             </tr>
 
-
             <?php while ($data = mysqli_fetch_assoc($query)) { ?>
 
             <tr>
 
-                <td>
-                    <?= $data['id']; ?>
-                </td>
+                <td><?= $data['id']; ?></td>
 
-                <td>
-                    <?= $data['nama']; ?>
-                </td>
+                <td><?= $data['nama']; ?></td>
 
-                <td>
-                    <?= $data['judul']; ?>
-                </td>
+                <td><?= $data['judul']; ?></td>
 
-                <td>
-                    <?= $data['tanggal_pinjam']; ?>
-                </td>
+                <td><?= $data['tanggal_pinjam']; ?></td>
 
-                <td>
-                    <?= $data['tanggal_kembali']; ?>
-                </td>
+                <td><?= $data['tanggal_kembali']; ?></td>
 
-                <td>
-                    <?= $data['tanggal_dikembalikan'] ?: '-'; ?>
-                </td>
+                <td><?= $data['tanggal_dikembalikan'] ?: '-'; ?></td>
 
-
-                <!-- STATUS -->
                 <td>
 
                     <form action="status.php" method="POST">
@@ -146,8 +129,6 @@ $query = mysqli_query($koneksi, "
 
                 </td>
 
-
-                <!-- AKSI -->
                 <td>
 
                     <a
@@ -169,6 +150,40 @@ $query = mysqli_query($koneksi, "
     </main>
 
 </div>
+
+<script>
+
+let urutanAZ = true;
+
+function urutkanNama() {
+
+    const tabel = document.querySelector("table");
+
+    const baris = Array.from(
+        tabel.querySelectorAll("tr")
+    ).slice(1);
+
+    baris.sort((a, b) => {
+
+        const namaA = a.cells[1].innerText.toLowerCase();
+        const namaB = b.cells[1].innerText.toLowerCase();
+
+        if (urutanAZ) {
+            return namaA.localeCompare(namaB);
+        } else {
+            return namaB.localeCompare(namaA);
+        }
+    });
+
+    baris.forEach(baris => tabel.appendChild(baris));
+
+    urutanAZ = !urutanAZ;
+
+    document.getElementById("tombolUrutkan").innerText =
+        urutanAZ ? "Urutkan Peminjaman A-Z" : "Urutkan Peminjaman Z-A";
+}
+
+</script>
 
 </body>
 </html>

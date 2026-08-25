@@ -11,6 +11,7 @@ if (!$query) {
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Data Anggota</title>
     <link rel="stylesheet" href="../style.css">
@@ -20,30 +21,33 @@ if (!$query) {
 
 <div class="layout">
 
-<aside class="sidebar">
+    <aside class="sidebar">
 
-<h2>Perpustakaan</h2>
+        <h2>Perpustakaan</h2>
 
-<nav>
-    <a href="../index.php">Dashboard</a>
-    <a href="../buku/index.php">Buku</a>
-    <a href="../anggota/index.php">Anggota</a>
-    <a href="../peminjaman/index.php">Peminjaman</a>
-    <a href="../logout.php">Logout</a>
-</nav>
+        <nav>
+            <a href="../index.php">Dashboard</a>
+            <a href="../buku/index.php">Buku</a>
+            <a href="index.php">Anggota</a>
+            <a href="../peminjaman/index.php">Peminjaman</a>
+            <a href="../logout.php">Logout</a>
+        </nav>
 
-</aside>
-
+    </aside>
 
     <main class="content">
 
         <h1>Data Anggota</h1>
 
         <a href="tambah.php" class="btn btn-tambah">
-            + Tambah Anggota
-        </a>
+    + Tambah Anggota
+</a>
 
-        <br><br>
+<button type="button" onclick="urutkanNama()" id="tombolUrut">
+    Urutkan Anggota A-Z
+</button>
+
+<br><br>
 
         <table>
 
@@ -60,8 +64,11 @@ if (!$query) {
             <tr>
 
                 <td><?= $data['id']; ?></td>
+
                 <td><?= $data['nama']; ?></td>
+
                 <td><?= $data['alamat']; ?></td>
+
                 <td><?= $data['telepon']; ?></td>
 
                 <td>
@@ -94,6 +101,40 @@ if (!$query) {
     </main>
 
 </div>
+
+<script>
+
+let urutanAZ = true;
+
+function urutkanNama() {
+
+    const tabel = document.querySelector("table");
+
+    const baris = Array.from(
+        tabel.querySelectorAll("tr")
+    ).slice(1);
+
+    baris.sort((a, b) => {
+
+        const namaA = a.cells[1].innerText.toLowerCase();
+        const namaB = b.cells[1].innerText.toLowerCase();
+
+        if (urutanAZ) {
+            return namaA.localeCompare(namaB);
+        } else {
+            return namaB.localeCompare(namaA);
+        }
+    });
+
+    baris.forEach(baris => tabel.appendChild(baris));
+
+    urutanAZ = !urutanAZ;
+
+    document.getElementById("tombolUrutkan").innerText =
+        urutanAZ ? "Urutkan Anggota A-Z" : "Urutkan Anggota Z-A";
+}
+
+</script>
 
 </body>
 </html>
