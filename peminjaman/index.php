@@ -23,6 +23,14 @@ $query = mysqli_query($koneksi, "
 <head>
     <title>Data Peminjaman</title>
     <link rel="stylesheet" href="../style.css">
+    <title>Data Buku</title>
+
+<link rel="stylesheet" href="../style.css">
+
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+>
 </head>
 
 <body>
@@ -38,6 +46,7 @@ $query = mysqli_query($koneksi, "
             <a href="../buku/index.php">Buku</a>
             <a href="../anggota/index.php">Anggota</a>
             <a href="index.php">Peminjaman</a>
+            <a href="../logout.php">Logout</a>
         </nav>
 
     </aside>

@@ -29,6 +29,7 @@ if (!$query) {
     <a href="../buku/index.php">Buku</a>
     <a href="../anggota/index.php">Anggota</a>
     <a href="../peminjaman/index.php">Peminjaman</a>
+    <a href="../logout.php">Logout</a>
 </nav>
 
 </aside>

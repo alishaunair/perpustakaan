@@ -7,9 +7,18 @@ if (isset($_POST['simpan'])) {
     $penulis = $_POST['penulis'];
     $tahun = $_POST['tahun'];
     $stok = $_POST['stok'];
+    $koneksi = mysqli_connect("localhost", "root", "", "perpustakaan");
 
-    $query = "INSERT INTO buku (judul, penulis, tahun, stok)
-              VALUES ('$judul', '$penulis', '$tahun', '$stok')";
+    // Upload gambar
+    $gambar = $_FILES['gambar']['name'];
+    $tmp = $_FILES['gambar']['tmp_name'];
+
+    if ($gambar != "") {
+        move_uploaded_file($tmp, "../uploads/" . $gambar);
+    }
+
+    $query = "INSERT INTO buku (judul, penulis, tahun, stok, gambar)
+              VALUES ('$judul', '$penulis', '$tahun', '$stok', '$gambar')";
 
     mysqli_query($koneksi, $query);
 
@@ -22,37 +31,66 @@ if (isset($_POST['simpan'])) {
 <html>
 <head>
     <title>Tambah Buku</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 
 <body>
 
-    <h1>Tambah Buku</h1>
+<div class="layout">
 
-    <form method="POST">
+    <aside class="sidebar">
 
-        <label>Judul Buku</label><br>
-        <input type="text" name="judul" required>
+        <h2>Perpustakaan</h2>
 
-        <br><br>
+        <nav>
+            <a href="../index.php">Dashboard</a>
+            <a href="index.php">Buku</a>
+            <a href="../anggota/index.php">Anggota</a>
+            <a href="../peminjaman/index.php">Peminjaman</a>
+        </nav>
 
-        <label>Penulis</label><br>
-        <input type="text" name="penulis" required>
+    </aside>
 
-        <br><br>
+    <main class="content">
 
-        <label>Tahun</label><br>
-        <input type="number" name="tahun" required>
+        <h1>Tambah Buku</h1>
 
-        <br><br>
+        <form method="POST" enctype="multipart/form-data">
 
-        <label>Stok</label><br>
-        <input type="number" name="stok" required>
+            <label>Judul Buku</label><br>
+            <input type="text" name="judul" required>
 
-        <br><br>
+            <br><br>
 
-        <button type="submit" name="simpan">Simpan</button>
+            <label>Penulis</label><br>
+            <input type="text" name="penulis" required>
 
-    </form>
+            <br><br>
+
+            <label>Tahun</label><br>
+            <input type="number" name="tahun" required>
+
+            <br><br>
+
+            <label>Stok</label><br>
+            <input type="number" name="stok" required>
+
+            <br><br>
+
+            <label>Gambar Buku</label><br>
+            <input type="file" name="gambar" accept="image/*">
+
+            <br><br>
+
+            <button type="submit" name="simpan">
+                Simpan
+            </button>
+
+        </form>
+
+    </main>
+
+</div>
 
 </body>
 </html>

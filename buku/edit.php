@@ -13,12 +13,46 @@ if (isset($_POST['update'])) {
     $tahun = $_POST['tahun'];
     $stok = $_POST['stok'];
 
-    $query = "UPDATE buku SET
-                judul = '$judul',
-                penulis = '$penulis',
-                tahun = '$tahun',
-                stok = '$stok'
-              WHERE id = $id";
+    $gambar = $_FILES['gambar']['name'];
+    $tmp = $_FILES['gambar']['tmp_name'];
+
+    if ($gambar != "") {
+
+        // Hapus gambar lama
+        if ($data['gambar'] != "") {
+
+            $file_lama = "../uploads/" . $data['gambar'];
+
+            if (file_exists($file_lama)) {
+                unlink($file_lama);
+            }
+        }
+
+        // Upload gambar baru
+        move_uploaded_file(
+            $tmp,
+            "../uploads/" . $gambar
+        );
+
+        $query = "UPDATE buku SET
+                    judul = '$judul',
+                    penulis = '$penulis',
+                    tahun = '$tahun',
+                    stok = '$stok',
+                    gambar = '$gambar'
+                  WHERE id = $id";
+
+    } else {
+
+        // Tidak memilih gambar baru
+        // Gambar lama tetap digunakan
+        $query = "UPDATE buku SET
+                    judul = '$judul',
+                    penulis = '$penulis',
+                    tahun = '$tahun',
+                    stok = '$stok'
+                  WHERE id = $id";
+    }
 
     mysqli_query($koneksi, $query);
 
@@ -31,41 +65,108 @@ if (isset($_POST['update'])) {
 <html>
 <head>
     <title>Edit Buku</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 
 <body>
 
-<h1>Edit Buku</h1>
+<div class="layout">
 
-<form method="POST">
+    <aside class="sidebar">
 
-    <label>Judul Buku</label><br>
-    <input type="text" name="judul"
-           value="<?= $data['judul']; ?>" required>
+        <h2>Perpustakaan</h2>
 
-    <br><br>
+        <nav>
+            <a href="../index.php">Dashboard</a>
+            <a href="index.php">Buku</a>
+            <a href="../anggota/index.php">Anggota</a>
+            <a href="../peminjaman/index.php">Peminjaman</a>
+            <a href="../logout.php">Logout</a>
+        </nav>
 
-    <label>Penulis</label><br>
-    <input type="text" name="penulis"
-           value="<?= $data['penulis']; ?>" required>
+    </aside>
 
-    <br><br>
+    <main class="content">
 
-    <label>Tahun</label><br>
-    <input type="number" name="tahun"
-           value="<?= $data['tahun']; ?>" required>
+        <h1>Edit Buku</h1>
 
-    <br><br>
+        <form method="POST" enctype="multipart/form-data">
 
-    <label>Stok</label><br>
-    <input type="number" name="stok"
-           value="<?= $data['stok']; ?>" required>
+            <label>Judul Buku</label><br>
+            <input
+                type="text"
+                name="judul"
+                value="<?= $data['judul']; ?>"
+                required
+            >
 
-    <br><br>
+            <br><br>
 
-    <button type="submit" name="update">Update</button>
+            <label>Penulis</label><br>
+            <input
+                type="text"
+                name="penulis"
+                value="<?= $data['penulis']; ?>"
+                required
+            >
 
-</form>
+            <br><br>
+
+            <label>Tahun</label><br>
+            <input
+                type="number"
+                name="tahun"
+                value="<?= $data['tahun']; ?>"
+                required
+            >
+
+            <br><br>
+
+            <label>Stok</label><br>
+            <input
+                type="number"
+                name="stok"
+                value="<?= $data['stok']; ?>"
+                required
+            >
+
+            <br><br>
+
+            <label>Gambar Saat Ini</label><br>
+
+            <?php if ($data['gambar'] != "") { ?>
+
+                <img
+                    src="../uploads/<?= $data['gambar']; ?>"
+                    width="100"
+                >
+
+            <?php } else { ?>
+
+                Tidak ada gambar
+
+            <?php } ?>
+
+            <br><br>
+
+            <label>Ganti Gambar</label><br>
+            <input
+                type="file"
+                name="gambar"
+                accept="image/*"
+            >
+
+            <br><br>
+
+            <button type="submit" name="update">
+                Update
+            </button>
+
+        </form>
+
+    </main>
+
+</div>
 
 </body>
 </html>
